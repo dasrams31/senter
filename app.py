@@ -65,6 +65,17 @@ font-size:13.5px;margin:16px 0}
 footer{margin-top:auto;padding:26px 0 34px;text-align:center;color:var(--faint);
 font-size:12px;font-family:var(--mono)}
 footer code{color:var(--muted);font-size:11px}
+@media(max-width:520px){
+.hero{padding:5vh 0 20px}
+.hero h1{font-size:38px}
+form.search{flex-direction:column}
+form.search button{padding:15px}
+form.search input{font-size:16px}
+.add form{flex-direction:column}
+.add button{padding:13px}
+.result h2{font-size:16px}
+.wrap{padding:0 16px}}
+
 </style></head><body><div class="wrap">
 <header class="top"><a class="brand" href="/">Senter</a>
 <span class="stats">{{ stats }}</span></header>
