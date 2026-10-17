@@ -31,6 +31,7 @@ SEEDS = [
     "http://c36lfiotrstasgwcozyrkyrnklkvavblspdw5n3vsicto77c6xc6snad.onion/",
     "http://7dk2mu57tewvohy756lomgwpaqgre7x5jg47fwgqlwc3k5avcihbxlid.onion/",
     "http://cedbjajfwaups32l6qxoqyqacypgso7ol5sdn5lusjbeh7dxd4xbjtid.onion/",
+    "http://llbu3yl7zu7fxfqalrttkcw4kumu2an4nlzwmbyk72qvwthirb7cnxyd.onion/",
 ]
 
 
@@ -83,6 +84,8 @@ def init():
         c.executescript(f.read())
     for u in SEEDS:
         c.execute("INSERT OR IGNORE INTO frontier(url, depth) VALUES(?, 0)", (u,))
+    # crash recovery: rows stuck in 'fetching' when the VM died go back to queue
+    c.execute("UPDATE frontier SET status='queued' WHERE status='fetching'")
     c.commit()
     c.close()
 
@@ -97,12 +100,25 @@ def norm_onion(link):
     return "http://%s%s" % (host, path)
 
 
+RECRAWL_AFTER = 7 * 86400  # re-index pages older than 7 days
+
+
 def pick(c):
     now = int(time.time())
     row = c.execute(
         "SELECT url, depth FROM frontier WHERE status='queued' "
         "OR (status='failed' AND fails < 3 AND next_fetch <= ?) "
         "ORDER BY next_fetch LIMIT 1", (now,)).fetchone()
+    if row:
+        return row
+    # nothing queued: recrawl the stalest indexed page (keeps index fresh forever)
+    row = c.execute(
+        "SELECT f.url, f.depth FROM frontier f JOIN pages p ON p.url = f.url "
+        "WHERE f.status='done' AND p.fetched_at < ? "
+        "ORDER BY p.fetched_at LIMIT 1", (now - RECRAWL_AFTER,)).fetchone()
+    if row:
+        c.execute("UPDATE frontier SET status='queued', next_fetch=0 WHERE url=?", (row[0],))
+        c.commit()
     return row
 
 
