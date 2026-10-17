@@ -20,8 +20,11 @@ PAGE = """<!DOCTYPE html>
 --text:#eceff4;--muted:#9aa4b4;--faint:#5d6675;--gold:#c9a86a;
 --mono:ui-monospace,Menlo,Consolas,monospace;
 --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;
-line-height:1.6;-webkit-font-smoothing:antialiased}
+body{background:#0b0d11 url(/static/bg.jpg) center/cover fixed;color:var(--text);
+font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;background:rgba(5,7,10,.55);
+pointer-events:none;z-index:0}
+.wrap,.add,.result{position:relative;z-index:1}
 a{color:inherit;text-decoration:none}
 .wrap{max-width:680px;margin:0 auto;padding:0 22px;min-height:100vh;display:flex;flex-direction:column}
 header.top{display:flex;justify-content:space-between;align-items:center;padding:26px 0}
@@ -33,7 +36,7 @@ text-transform:uppercase;font-weight:700}
 .hero h1 span{color:var(--gold)}
 .hero p{color:var(--muted);font-size:15px}
 form.search{display:flex;gap:10px;margin:26px 0 8px}
-form.search input{flex:1;background:var(--panel);border:1px solid var(--line);color:var(--text);
+form.search input{flex:1;background:rgba(10,13,18,.82);border:1px solid var(--line);color:var(--text);
 border-radius:12px;padding:15px 18px;font-size:16px;outline:none;min-width:0}
 form.search input:focus{border-color:var(--gold)}
 form.search button{background:var(--gold);color:#0b0d11;border:none;border-radius:12px;
@@ -49,7 +52,7 @@ margin-bottom:6px}
 .pager{display:flex;gap:12px;padding:10px 2px 30px}
 .pager a{border:1px solid var(--line);border-radius:8px;padding:8px 18px;font-size:14px}
 .pager a:hover{border-color:var(--gold)}
-.add{border:1px solid var(--line);border-radius:14px;padding:24px;margin:30px 0;background:var(--panel)}
+.add{border:1px solid var(--line);border-radius:14px;padding:24px;margin:30px 0;background:rgba(13,16,22,.82)}
 .add h2{font-size:15px;margin-bottom:6px}
 .add p{color:var(--muted);font-size:13.5px;margin-bottom:14px}
 .add form{display:flex;gap:10px}
